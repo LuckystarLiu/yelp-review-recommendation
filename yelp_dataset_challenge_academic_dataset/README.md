@@ -1,0 +1,1 @@
+This folder is a placeholder for the yelp data set which are too large to be placed here. So you have to download the data set from [here](https://www.yelp.com/dataset_challenge) and extract them in this folder.
