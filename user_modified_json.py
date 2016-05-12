@@ -1,39 +1,20 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed May 11 23:38:22 2016
-
-@author: ZMP
-"""
-
-# -*- coding: utf-8 -*-
-"""
-Created on Tue May 10 19:20:22 2016
-This script loads users json file and writes to csv
-@author: ZMP
-"""
 import json
 import csv
 import sys,re
 
 def user_modified_json():
-    #Fixes ASCII error in Python csv writer module
-    reload(sys)
-    sys.setdefaultencoding('utf-8')
+    # Fixes ASCII error in Python csv writer module
+    # reload(sys)
+    # sys.setdefaultencoding('utf-8')
 
-    #Load json files by lines into data
+    # Load json files by lines into data
     data = []
     attribute_name={}
-    f=open('yelp_academic_dataset_user.json')
-    i=0   
-    for line in f:
-        '''
-        if i>=10000:
-            break;
-            i+=1;
-            '''
+    user_file = open('yelp_academic_dataset_user.json')
+    for line in user_file:
         data.append(json.loads(line))
             
-    #extract csv headers, 10000 samples should be sufficient
+    # extract csv headers, 10000 samples should be sufficient
     i=0
     for rows in data:
         if i>=10000:

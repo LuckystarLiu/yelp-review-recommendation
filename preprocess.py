@@ -1,15 +1,13 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu May 12 00:48:16 2016
+# extract features from the yelp raw data set
 
-@author: ZMP
-"""
 from random import shuffle
 import json
-import re,csv
+import re
+import csv
 import cPickle
 import user_modified_json as uj
 from sklearn import datasets, linear_model
+
 def preprocess():
 
     # read the review data set
@@ -17,25 +15,22 @@ def preprocess():
     with open('yelp_academic_dataset_review.json') as review_json_file:
         for line in review_json_file:
             reviews.append(json.loads(line))
-    print 'number of reviews:', len(reviews) # 2225213
+    
     # read the user data set
     users = uj.user_modified_json()
-    print 'number of users:', len(users) # 552339
 
-    #read the votes_time_lr prediction model
+    # read the votes_time_lr prediction model
     with open('votes_time_lr.pkl', 'rb') as fid:
         lr = cPickle.load(fid)
-    print 'lr_loaded'    
     
     # read the taste words
     taste_words = []
     with open('taste_words.txt') as taste_words_file:
         for line in taste_words_file:
             taste_words.append(line[:-1]) # ignore the \r
-    print 'number of taste words:', len(taste_words)
 
     # extract following features from reviews and users
-    #   label: the quality of the review (i.e. the number of useful votes): int
+    #   label: the quality of the review
     #   1. length of review: int
     #   2. has mentioned taste?: boolean
     #   3. has mentioned cost?: boolean
@@ -67,7 +62,7 @@ def preprocess():
         csv_writer = csv.writer(csvfile, delimiter=',')
         csv_writer.writerows(data_set)
 
-def extract(reviews, users, taste_words,lr):
+def extract(reviews, users, taste_words, lr):
     data_set = []
     for review in reviews:
         user = findUser(review['user_id'], users)
@@ -92,7 +87,7 @@ def hasTaste(text, taste_words):
     text = text.lower()
     # find word in taste words list
     for word in taste_words:
-        if text.find(word):
+        if text.find(word) != -1:
             return True
     return False
 
