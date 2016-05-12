@@ -60,8 +60,8 @@ for rows in data:
                 row_data[keys]=Yelp_time
             if(keys==u'review_count'):
                 row_data[keys]=rows[keys]
-            if(keys==u'user_id'):
-                row_data[keys]=rows[keys]
+            #if(keys==u'user_id'):
+            #    row_data[keys]=rows[keys]
             if(keys==u'name'):
                 row_data[keys]=rows[keys]
             if(keys==u'type'):
