@@ -4,10 +4,10 @@ import random
 import json
 import csv
 import datetime
+import numpy as np
+from scipy import sparse
+from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-# import cPickle
-# import user_modified_json as uj
-# from sklearn import datasets, linear_model
 
 def main():
 
@@ -19,14 +19,13 @@ def main():
     print('parsing user data...')
     users = parse_json('./yelp_dataset_challenge_academic_dataset/yelp_academic_dataset_user.json')
 
-    # NOTE: use count of votes as label first
-    # read the votes_time_lr prediction model
-    # with open('votes_time_lr.pkl', 'rb') as fid:
-    #     lr = cPickle.load(fid)
-    
     # sample the data
-    print('sampling from '+str(len(reviews))+' data set...')
-    review_samples = sample(reviews, 100000)
+    print('sampling...')
+    review_samples = sample(reviews, 10000)
+
+    # convert to dictionary and store only useful info for fast reading
+    print('converting users from list to dict...')
+    users = extract_users(users)
 
     # extract
     print('extracting features...')
@@ -35,30 +34,23 @@ def main():
     # split into training and testing data set
     print('splitting data set...')
     portion = 0.6
-    train_len = int(len(data_set)*portion)
+    train_len = int(data_set.shape[0]*portion)
     train_set = data_set[:train_len]
     test_set = data_set[train_len:]
 
-    # write the data set into csv file
-    print('writing training data set...')
-    write_to_csv('./data_set/train_set.csv', train_set)
-    print('writing testing data set...')
-    write_to_csv('./data_set/test_set.csv', test_set)
+    # writing to csv file
+    print('writing to csv files...')
+    np.savetxt('./data_set/train_set.csv', train_set, delimiter=',')
+    np.savetxt('./data_set/test_set.csv', test_set, delimiter=',')
 
 def extract(reviews, users):
 
-    # convert to dictionary and store only useful info for fast reading
-    users = extract_users(users)
-
-    # get bag of words for all reviews
-    bag_of_words = get_bag_of_words([review['text'] for review in reviews])
-
-    # extract features
+    # get user info and length of review as text features
+    print('extracting dense features...')
     data_set = []
+    texts = []
     now = datetime.datetime.now()
-    for i in range(len(reviews)):
-
-        review = reviews[i]
+    for review in reviews:
 
         # check user
         if review['user_id'] not in users:
@@ -74,7 +66,7 @@ def extract(reviews, users):
         days = divmod(delta.total_seconds(), 24 * 60 * 60)[0]
         review_quality = sum(review['votes'].values()) / days
 
-        # combine the features
+        # put the data into data set
         data_set.append([review_quality,\
                          user['review_count'],\
                          user['average_stars'],\
@@ -85,9 +77,19 @@ def extract(reviews, users):
                          user['elite_count'],\
                          user['compliment_count'],\
                          user['fan_count'],\
-                         len(review['text'])]
-                         + list(bag_of_words[i]))
+                         len(review['text'])])
+
+        # review texts for getting bag of words
+        texts.append(review['text'])
         
+    # get bag of words for all reviews as text features
+    print('extracting bag of words...')
+    bag_of_words = get_bag_of_words(texts)
+
+    # combine explicit features and bag of words features
+    print('combining dense features and bags of words...')
+    data_set = np.hstack([data_set, bag_of_words])
+
     return data_set
 
 # convert json to dictionary
@@ -122,23 +124,20 @@ def sample(data, num):
     random.shuffle(data_indices)
     return [data[i] for i in data_indices[:num]]
 
-# refer to http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html
+# detail refer to http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html
 def get_bag_of_words(texts):
 
     # count the occurrence of words in all texts
-    count_vect = CountVectorizer()
+    count_vect = CountVectorizer(max_features = 500)
     X_train_counts = count_vect.fit_transform(texts)
-    X_train_counts = X_train_counts.toarray()
 
     # transform from occurrence to frequency
     tfidf_transformer = TfidfTransformer()
     X_train_tfidf = tfidf_transformer.fit_transform(X_train_counts)
 
-    return X_train_tfidf.toarray()
-
-def write_to_csv(filename, data_set):
-    with open(filename, 'w+') as csvfile:
-        csv_writer = csv.writer(csvfile, delimiter=',')
-        csv_writer.writerows(data_set)
+    # downsample (dimension reduction)
+    print('downsampling bag of words...')
+    pca = PCA(n_components = 100)
+    return pca.fit_transform(X_train_tfidf.toarray())
 
 main()

@@ -7,37 +7,38 @@ Extract data from json reviews and analyze the votes-time relationship
 
 import json
 import matplotlib.pyplot as plt
-import sys,re
-reload(sys)
-sys.setdefaultencoding('utf-8')
-data = []
-attribute_name={}
-f=open('yelp_academic_dataset_review.json')
-i=0   
-likes_time=[]  #[[num_of_votes, "2016-05" - post_date]]
-pd=[]  #["2016-05" - post_date]
-steps=20
+import datetime
 
-# 1.Loads the review json file, find the votes and post date of each review
-for line in f:
-    data.append(json.loads(line))
-for rows in data:
-    post_time=[int(x.group()) for x in re.finditer(r'\d+', rows[u'date'])]
-    post_duration=1.0*(2016-post_time[0])+1.0*(5-post_time[1])/12
-    likes_time+=[[rows[u'votes'][u'useful'],post_duration]]
-    pd+=[post_duration]
+def main():
 
-# prepare data to plot
-minpd=min(pd)
-maxpd=max(pd)
-dur_array=[0.0]*(steps+1)
-dur_array_cnt=[0.0]*(steps+1)
-for i in likes_time:
-    ind=int(round((i[1]-minpd)/(maxpd-minpd)*steps))
-    dur_array[ind]+=i[0]
-    dur_array_cnt[ind]+=1
-for i in range(steps+1):
-    dur_array[i]/=dur_array_cnt[i]
-time_x=[1.0/steps*i*(maxpd-minpd)+minpd for i in range(steps+1)]
-plt.plot(time_x,dur_array)
+    # load reviews data
+    print('parsing...')
+    reviews = parse_json('./yelp_dataset_challenge_academic_dataset/yelp_academic_dataset_review.json')
 
+    # extract duration of post date and votes count
+    print('extracting...')
+    votes = []
+    days = []
+    special_date = datetime.datetime(1970, 1, 1)
+    for i in range(0, len(reviews), 500):
+        review = reviews[i]
+        votes_count = sum(review['votes'].values())
+        review_date = datetime.datetime.strptime(review['date'], '%Y-%m-%d')
+        delta = review_date - special_date
+        day = divmod(delta.total_seconds(), 24 * 60 * 60)[0]
+        votes.append(votes_count)
+        days.append(day)
+
+    # prepare data to plot
+    print('plotting...')
+    plt.plot(days, votes, 'ro')
+    plt.show()
+
+def parse_json(filename):
+    data = []
+    with open(filename) as json_file:
+        for line in json_file:
+            data.append(json.loads(line))
+    return data
+
+main()
