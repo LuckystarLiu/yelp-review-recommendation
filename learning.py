@@ -25,14 +25,14 @@ def main():
     print('test set: ', X_test.shape)
 
     # learn with Linear Regression
-    # print('learning linear regression...')
-    # model = linear_model.LinearRegression()
-    # model.fit(X_train, y_train)
-    # print('predicting linear regression...')
-    # y_pre = model.predict(X_test)
-    # print('Linear_regression: ')
-    # print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
-    # print('r2_score: ', r2_score(y_test, y_pre))
+    print('learning linear regression...')
+    model = linear_model.LinearRegression()
+    model.fit(X_train, y_train)
+    print('predicting linear regression...')
+    y_pre = model.predict(X_test)
+    print('Linear_regression: ')
+    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
+    print('r2_score: ', r2_score(y_test, y_pre))
 
     # SVR
     print('learning SVR...')
