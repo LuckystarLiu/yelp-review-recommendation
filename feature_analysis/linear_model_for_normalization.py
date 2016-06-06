@@ -1,8 +1,11 @@
-# Extract data from reviews and analyze the votes-time relationship
+# train the linear model on the reviews' votes by its time after 2008
 
 import json
-import matplotlib.pyplot as plt
 import datetime
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.externals import joblib # save model
 
 def main():
 
@@ -33,9 +36,24 @@ def main():
         else:
             avg_votes.append(item['votes'] / item['count'])
 
-    # prepare data to plot
+    # train linear model on average votes and year
+    years = list(range(start_year, start_year+len(avg_votes)))
+    X = np.array(years).reshape((len(years), 1))
+    y = np.array(avg_votes).reshape((len(avg_votes), 1))
+    print(X.shape, y.shape)
+    clf = LinearRegression()
+    clf.fit(X, y)
+
+    # save the linear model
+    joblib.dump(clf, 'linear_model_for_normalization.pkl')
+
     print('plotting...')
-    plt.plot(range(start_year, start_year+len(avg_votes)), avg_votes, 'ro')
+    # plot data set
+    plt.plot(years, avg_votes, 'ro')
+    # plot the linear model
+    y_pre = clf.predict(X)
+    print(y_pre.shape)
+    plt.plot(years, y_pre)
     plt.show()
 
 def parse_json(filename):
