@@ -8,6 +8,7 @@ import numpy as np
 from scipy import sparse
 from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
+from sklearn.externals import joblib
 
 def main():
 
@@ -19,9 +20,19 @@ def main():
     print('parsing user data...')
     users = parse_json('./yelp_dataset_challenge_academic_dataset/yelp_academic_dataset_user.json')
 
+    # use only the reviews after 2008
+    valid_reviews = []
+    for review in reviews:
+        review_date = datetime.datetime.strptime(review['date'], '%Y-%m-%d')
+        if review_date.year < 2008: 
+            continue
+        valid_reviews.append(review)
+    reviews = valid_reviews
+
     # sample the data
-    print('sampling...')
-    review_samples = sample(reviews, 10000)
+    sample_num = len(reviews)
+    print('sampling...', sample_num, 'out of', len(reviews))
+    review_samples = sample(reviews, sample_num)
 
     # convert to dictionary and store only useful info for fast reading
     print('converting users from list to dict...')
@@ -33,7 +44,7 @@ def main():
 
     # split into training and testing data set
     print('splitting data set...')
-    portion = 0.6
+    portion = 0.7
     train_len = int(data_set.shape[0]*portion)
     train_set = data_set[:train_len]
     test_set = data_set[train_len:]
@@ -44,6 +55,9 @@ def main():
     np.savetxt('./data_set/test_set.csv', test_set, delimiter=',')
 
 def extract(reviews, users):
+
+    # load the linear model for normalization
+    clf = joblib.load('./normalization/linear_model_for_normalization.pkl')
 
     # get user info and length of review as text features
     print('extracting dense features...')
@@ -62,9 +76,8 @@ def extract(reviews, users):
 
         # normalize: review_quality = votes/day
         review_date = datetime.datetime.strptime(review['date'], '%Y-%m-%d')
-        delta = now - review_date
-        days = divmod(delta.total_seconds(), 24 * 60 * 60)[0]
-        review_quality = sum(review['votes'].values()) / days
+        normalizor = clf.predict(np.array([[review_date.year]]))[0][0]
+        review_quality = sum(review['votes'].values()) / normalizor
 
         # put the data into data set
         data_set.append([review_quality,\
@@ -138,6 +151,7 @@ def get_bag_of_words(texts):
     # downsample (dimension reduction)
     print('downsampling bag of words...')
     pca = PCA(n_components = 100)
+
     return pca.fit_transform(X_train_tfidf.toarray())
 
 main()

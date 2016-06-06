@@ -2,9 +2,10 @@
 
 import csv
 import numpy as np
-from sklearn import datasets, linear_model, svm
-from sklearn.metrics import mean_absolute_error, r2_score, roc_curve
 from sklearn.preprocessing import PolynomialFeatures
+from sklearn.dummy import DummyRegressor
+from sklearn.linear_model import Ridge, LinearRegression, PassiveAggressiveRegressor
+from sklearn.metrics import mean_absolute_error, r2_score
 
 def main():
 
@@ -16,51 +17,47 @@ def main():
     print('train set: ', X_train.shape)
     print('test set: ', X_test.shape)
 
+    # The result turns out to be worse using this
     # convert to polynomial features
-    print('converting to polynomial features...')
-    poly = PolynomialFeatures(2)
-    X_train = poly.fit_transform(X_train)
-    X_test = poly.fit_transform(X_test)
-    print('train set: ', X_train.shape)
-    print('test set: ', X_test.shape)
+    # print('converting to polynomial features...')
+    # poly = PolynomialFeatures(2)
+    # X_train = poly.fit_transform(X_train)
+    # X_test = poly.fit_transform(X_test)
+    # print('train set: ', X_train.shape)
+    # print('test set: ', X_test.shape)
 
-    # learn with Linear Regression
-    print('learning linear regression...')
-    model = linear_model.LinearRegression()
-    model.fit(X_train, y_train)
-    print('predicting linear regression...')
-    y_pre = model.predict(X_test)
-    print('Linear_regression: ')
-    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
-    print('r2_score: ', r2_score(y_test, y_pre))
+    # training classifiers
+    print('training, predicting and evaluating...')
 
-    # SVR
-    print('learning SVR...')
-    model= svm.SVR(kernel='sigmoid', C=1)
+    # Dummy Regression (baseline model)
+    print('Dummy Regression: (baseline)')
+    model = DummyRegressor(strategy='mean')
     model.fit(X_train, y_train)
-    print('predicting SVR...')
     y_pre = model.predict(X_test)
-    print('SVM: ')
     print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
     print('r2_score: ', r2_score(y_test, y_pre))
 
     # Ridge
-    print('learning Ridge...')
-    model= linear_model.Ridge()
-    model.fit(X_train, y_train)
-    print('predicting Ridge...')
-    y_pre = model.predict(X_test)
     print('Ridge: ')
+    model = Ridge()
+    model.fit(X_train, y_train)
+    y_pre = model.predict(X_test)
     print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
     print('r2_score: ', r2_score(y_test, y_pre))
 
-    # ?
-    print('learning ?...')
-    model = linear_model.PassiveAggressiveRegressor()
+    # Linear Regression
+    print('Linear_regression: ')
+    model = LinearRegression()
     model.fit(X_train, y_train)
-    print('predicting ?...')
     y_pre = model.predict(X_test)
+    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
+    print('r2_score: ', r2_score(y_test, y_pre))
+
+    # Passive aggresive
     print('Poly: ')
+    model = PassiveAggressiveRegressor()
+    model.fit(X_train, y_train)
+    y_pre = model.predict(X_test)
     print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
     print('r2_score: ', r2_score(y_test, y_pre))
 
