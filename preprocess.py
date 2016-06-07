@@ -10,6 +10,8 @@ from sklearn.decomposition import PCA
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.externals import joblib
 
+word_count = 100
+
 def main():
 
     # read the review data set
@@ -150,7 +152,7 @@ def get_bag_of_words(texts):
 
     # downsample (dimension reduction)
     print('downsampling bag of words...')
-    pca = PCA(n_components = 100)
+    pca = PCA(n_components = word_count)
 
     return pca.fit_transform(X_train_tfidf.toarray())
 
