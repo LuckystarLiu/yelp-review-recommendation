@@ -25,3 +25,5 @@ Features: Original Features + Bag of Words
 | Linear Regression  | 1.07                | 0.26         |
 | Ridge Regression   | 1.07                | 0.26         |
 | Passive Aggressive | 1.42                | -2.10        |
+| AdaBoost           | 15.17               | -23.69       |
+| Random Forest      | 0.98                | 0.48         |
