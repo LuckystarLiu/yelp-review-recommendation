@@ -17,11 +17,6 @@ def main():
     print('parsing review data...')
     reviews = parse_json('./yelp_dataset_challenge_academic_dataset/yelp_academic_dataset_review.json')
 
-    # sample the data
-    sample_num = 10000
-    print('sampling...', sample_num, 'out of', len(reviews))
-    reviews = sample(reviews, sample_num)
-
     # use only reviews posted after 2008
     valid_reviews = []
     for review in reviews:
@@ -29,10 +24,16 @@ def main():
         if review_date.year < 2008: 
             continue
         valid_reviews.append(review)
+    reviews = valid_reviews
+
+    # sample the data
+    # sample_num = len(reviews)
+    # print('sampling...', sample_num, 'out of', len(reviews))
+    # reviews = sample(reviews, sample_num)
 
     # tokenize text for all reviews
     print('tokenizing text for all reviews...')
-    texts = [review['text'] for review in valid_reviews]
+    texts = [review['text'] for review in reviews]
     count_vect = CountVectorizer(max_features = 100)
     X = count_vect.fit_transform(texts)
 
@@ -47,7 +48,7 @@ def main():
     # get labels
     print('calculating labels...')
     y = []
-    for review in valid_reviews:
+    for review in reviews:
         review_date = datetime.datetime.strptime(review['date'], '%Y-%m-%d')
         # normalize
         normalizor = clf.predict(np.array([[review_date.year]]))[0][0]
@@ -65,42 +66,42 @@ def main():
     print('test size:', X_test.shape)
 
     # convert to polynomial features
-    print('converting to polynomial features...')
-    poly = PolynomialFeatures(2)
-    X_train = poly.fit_transform(X_train.toarray())
-    X_test = poly.fit_transform(X_test.toarray())
-    print('train set: ', X_train.shape)
-    print('test set: ', X_test.shape)
+    # print('converting to polynomial features...')
+    # poly = PolynomialFeatures(2)
+    # X_train = poly.fit_transform(X_train.toarray())
+    # X_test = poly.fit_transform(X_test.toarray())
+    # print('train set: ', X_train.shape)
+    # print('test set: ', X_test.shape)
 
     # training classifiers
     print('training, predicting and evaluating...')
 
     # Dummy Regression (baseline model)
-    print('Dummy Regression:')
+    print('\nDummy Regression:')
     model = DummyRegressor(strategy='mean')
     model.fit(X_train, y_train)
     y_pre = model.predict(X_test)
     print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
     print('r2_score: ', r2_score(y_test, y_pre))
 
-    # Ridge
-    print('Ridge: ')
-    model = Ridge()
-    model.fit(X_train, y_train)
-    y_pre = model.predict(X_test)
-    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
-    print('r2_score: ', r2_score(y_test, y_pre))
-
     # Linear Regression
-    print('Linear_regression: ')
+    print('\nLinear_regression: ')
     model = LinearRegression()
     model.fit(X_train, y_train)
     y_pre = model.predict(X_test)
     print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
     print('r2_score: ', r2_score(y_test, y_pre))
 
+    # Ridge
+    print('\nRidge: ')
+    model = Ridge()
+    model.fit(X_train, y_train)
+    y_pre = model.predict(X_test)
+    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
+    print('r2_score: ', r2_score(y_test, y_pre))
+
     # passive aggresive
-    print('Poly: ')
+    print('\nPoly: ')
     model = PassiveAggressiveRegressor()
     model.fit(X_train, y_train)
     y_pre = model.predict(X_test)
