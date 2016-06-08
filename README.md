@@ -1,7 +1,7 @@
 # Running
 
  1. Download Yelp dataset from [here](https://www.yelp.com/dataset_challenge) and extract all the dataset in the folder `yelp_dataset_challenge_academic_dataset`.
- 2. Run `preprocess.py` to preprocess the dataset just downloaded, and they will be save in the folder `data_set`.
+ 2. Run `preprocess.py` to preprocess the dataset just downloaded, and they will be saved in the folder `data_set`.
  3. Run either `learning.py` or `text_only_learning.py` to get performances among different regression learners.
    - The `learning.py` learns on both metadata features and text features (bag of words).
    - The `text_only_learning.py` learns only on text features.
