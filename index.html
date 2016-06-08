@@ -50,11 +50,23 @@
 <h3>
 <a id="synopsis" class="anchor" href="#synopsis" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Synopsis</h3>
 
+<h4>
+<a id="motivation" class="anchor" href="#motivation" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Motivation</h4>
+
 <p>The reviews we would see in the Yelp app in a first glance are mainly 2 kinds: reviews with high votes, and reviews that are fresh. Although the reviews with high votes could be useful, they are probably out-of-date. Thus, fresh reviews are also needed to be displayed in the reviews flow. However, most of the fresh reviews are low quality, or say, useless. It would be better to rank those more useful reviews to be higher than less useful ones, so that the users could read the useful ones first to save their time.</p>
+
+<h4>
+<a id="solution" class="anchor" href="#solution" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Solution</h4>
 
 <p>To rank the reviews in terms of their quality (weighted by kinds of votes and normalized by post time), the learners we tried to use are regression learners. To be more specific, we used Linear Regression, Ridge Regression, Passive Aggressive Regression, AdaBoost, Random Forest, etc. In terms of features, we used both text features (bag of words) and metadata of reviews and their users. In addition, the dimentsion of the text features are normalized by overall frequency and reduced using PCA technique.</p>
 
+<h4>
+<a id="measurement" class="anchor" href="#measurement" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Measurement</h4>
+
 <p>The dataset we used are the json files achieved from <a href="https://www.yelp.com/dataset_challenge">Yelp's official website</a>. We first preprocessed them to be standardized csv files. Then trained and tested them with scikit-learn library. To measure the success, we used the Dummy Regressor learner as the baseline. It is similar to the ZeroR classifier in Weka which simply predicts the result by assigning a simple value (i.e. mean, median, constant quality). We compared the performaces of different kinds of regression learners with the baseline learner.</p>
+
+<h4>
+<a id="key-results" class="anchor" href="#key-results" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Key Results</h4>
 
 <p>We evaluated the performance of regression learners with R2 score. It could be negative because the prediction for regression problem could be arbitrarily bad. And the closer to 1, the better it is. For the result, the R2 score of the <strong>baseline learner is -9.22 * 10^-7</strong>. The <strong>best learner we find is Random Forest, earning 0.48 R2 score</strong>. The second best ones are Linear and Ridge Regression, both getting 0.26 R2 score. The key features that greatly improved our result are metadata of reviews and users, such as votes, stars, etc. When using only text features, we only get 0.02 R2 score with Linear Regression and 0.03 with Ridge Regression.</p>
 
