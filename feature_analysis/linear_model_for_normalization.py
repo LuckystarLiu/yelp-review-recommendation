@@ -50,6 +50,8 @@ def main():
     print('plotting...')
     # plot data set
     plt.plot(years, avg_votes, 'ro')
+    plt.xlabel('year')
+    plt.ylabel('average votes')
     # plot the linear model
     y_pre = clf.predict(X)
     print(y_pre.shape)
