@@ -28,8 +28,6 @@ def main():
     print('parsing data set...')
     X, y = parse('./data_set/classifications_dataset.csv')
     print('train set: ', X.shape)
-    X=X[:200000,:]
-    y=y[:200000,:]
     X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.3, random_state=0)
     
 
