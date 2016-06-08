@@ -1,4 +1,4 @@
-### Members
+# Members
 
 _Listed in alphabetically order_
 
@@ -8,11 +8,11 @@ Shiping Zhao (szd041): shipingzhao2015@u.northwestern.edu
 
 Yan Liu (ylk070): yanliu2015@u.northwestern.edu
 
-### Organization
+# Organization
 
 This is a Machine Learning project in EECS 349 at Northwestern University.
 
-### Synopsis
+# Synopsis
 
 __Motivation.__ The reviews we would see in the Yelp app in a first glance are mainly 2 kinds: reviews with high votes, and reviews that are fresh. Although the reviews with high votes could be useful, they are probably out-of-date. Thus, fresh reviews are also needed to be displayed in the reviews flow. However, most of the fresh reviews are low quality, or say, useless. It would be better to rank those more useful reviews to be higher than less useful ones, so that the users could read the useful ones first to save their time.
 
@@ -22,7 +22,7 @@ __Measurement.__ The dataset we used are the json files achieved from [Yelp's of
 
 __Key Results.__ We evaluated the performance of regression learners with R2 score. It could be negative because the prediction for regression problem could be arbitrarily bad. And the closer to 1, the better it is. For the result, the R2 score of the __baseline learner is -9.22 * 10^-7__. The __best learner we find is Random Forest, earning 0.48 R2 score__. The second best ones are Linear and Ridge Regression, both getting 0.26 R2 score. The key features that greatly improved our result are metadata of reviews and users, such as votes, stars, etc. When using only text features, we only get 0.02 R2 score with Linear Regression and 0.03 with Ridge Regression.
 
-### Performance
+# Performance
 
 __Features: Bag of Words__
 
