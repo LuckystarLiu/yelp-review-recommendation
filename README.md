@@ -5,7 +5,9 @@
 _Listed in alphabetically order_
 
 Desheng Liu (dli848): deshengliu2015@u.northwestern.edu
+
 Shiping Zhao (szd041): shipingzhao2015@u.northwestern.edu
+
 Yan Liu (ylk070): yanliu2015@u.northwestern.edu
 
 ### Organization
