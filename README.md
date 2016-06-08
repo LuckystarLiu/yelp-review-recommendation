@@ -53,3 +53,13 @@ __Features: Original Features + Bag of Words__
 | Passive Aggressive | 1.42                | -2.10        |
 | AdaBoost           | 15.17               | -23.69       |
 | Random Forest      | 0.98                | 0.48         |
+
+__Features: Classifications Results (Original Features + Bag of Words__)
+
+| Models                | Accuracy      |
+| -----------------     | ------------  |
+| Dummy Classification  |0.168815447007 |
+| DecisionTreeClassifier|0.383738877792 |
+|  KNeighborsClassifier |0.456782277102 |
+| GaussianNB():         |0.5037074027   |
+
