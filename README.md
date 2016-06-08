@@ -41,7 +41,7 @@ __Features: Bag of Words__
 | Ridge Regression   | 1.28                | 0.03         |
 | Passive Aggressive | 1.36                | -0.08        |
 | AdaBoost           | 4.74                | -3.71        |
-| Random Forest      | running             | running      |
+| Random Forest      | 1.39                | -0.27        |
 
 __Features: Original Features + Bag of Words__
 
