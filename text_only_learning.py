@@ -5,7 +5,7 @@ import json
 import numpy as np
 import datetime
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
-from sklearn.preprocessing import PolynomialFeatures
+from sklearn.preprocessing import PolynomialFeatures, MinMaxScaler
 from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import Ridge, LinearRegression, PassiveAggressiveRegressor
 from sklearn.neighbors import KNeighborsRegressor
@@ -75,6 +75,12 @@ def main():
     # X_test = poly.fit_transform(X_test.toarray())
     # print('train set: ', X_train.shape)
     # print('test set: ', X_test.shape)
+
+    # scale the attributes to [0, 1]
+    print('standardizing the features...')
+    min_max_scaler = MinMaxScaler()
+    X_train = min_max_scaler.fit_transform(X_train)
+    X_test = min_max_scaler.transform(X_test)
 
     # training classifiers
     print('training, predicting and evaluating...')
