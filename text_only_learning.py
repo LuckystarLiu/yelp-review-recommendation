@@ -8,6 +8,9 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.dummy import DummyRegressor
 from sklearn.linear_model import Ridge, LinearRegression, PassiveAggressiveRegressor
+from sklearn.neighbors import KNeighborsRegressor
+from sklearn.neural_network import BernoulliRBM
+from sklearn.ensemble import AdaBoostRegressor, RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, r2_score
 from sklearn.externals import joblib
 
@@ -103,6 +106,22 @@ def main():
     # passive aggresive
     print('\nPoly: ')
     model = PassiveAggressiveRegressor()
+    model.fit(X_train, y_train)
+    y_pre = model.predict(X_test)
+    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
+    print('r2_score: ', r2_score(y_test, y_pre))
+
+    # AdaBoost
+    print('\nAdaBoost: ')
+    model = AdaBoostRegressor()
+    model.fit(X_train, y_train)
+    y_pre = model.predict(X_test)
+    print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
+    print('r2_score: ', r2_score(y_test, y_pre))
+
+    # Random Forest
+    print('\nRandom Forest:')
+    model = RandomForestRegressor()
     model.fit(X_train, y_train)
     y_pre = model.predict(X_test)
     print('mean absolute error: ', mean_absolute_error(y_test, y_pre))
