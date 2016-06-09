@@ -1,37 +1,25 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8'>
-    <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="Yelp Reviews Recommendation : EECS 349 Machine Learning project">
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Yelp Reviews Recommendation</title>
+    <meta charset="UTF-8">
+    <title>Yelp Reviews Recommendation by lyudison</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Yelp Reviews Recommendation</h1>
+      <h2 class="project-tagline">EECS 349 Machine Learning project</h2>
+      <a href="https://github.com/lyudison/yelp-reviews-recommendation" class="btn">View on GitHub</a>
+      <a href="https://github.com/lyudison/yelp-reviews-recommendation/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/lyudison/yelp-reviews-recommendation/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/lyudison/yelp-reviews-recommendation">View on GitHub</a>
-
-          <h1 id="project_title">Yelp Reviews Recommendation</h1>
-          <h2 id="project_tagline">EECS 349 Machine Learning project</h2>
-
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/lyudison/yelp-reviews-recommendation/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/lyudison/yelp-reviews-recommendation/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
+    <section class="main-content">
+      <h1>
 <a id="members" class="anchor" href="#members" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Members</h1>
 
 <p><em>Listed in alphabetically order</em></p>
@@ -52,7 +40,7 @@
 
 <p><strong>Motivation.</strong> The reviews we would see in the Yelp app in a first glance are mainly 2 kinds: reviews with high votes, and reviews that are fresh. Although the reviews with high votes could be useful, they are probably out-of-date. Thus, fresh reviews are also needed to be displayed in the reviews flow. However, most of the fresh reviews are low quality, or say, useless. It would be better to rank those more useful reviews to be higher than less useful ones, so that the users could read the useful ones first to save their time.</p>
 
-<p><strong>Solution.</strong> To rank the reviews in terms of their quality (weighted by kinds of votes and normalized by post time), the learners we tried to use are regression learners. To be more specific, we used Linear Regression, Ridge Regression, Passive Aggressive Regression, AdaBoost, Random Forest, etc. In terms of features, we used both text features (bag of words) and metadata of reviews and their users. In addition, the dimension of the text features are normalized by overall frequency and reduced using PCA technique.</p>
+<p><strong>Solution.</strong> To rank the reviews in terms of their quality (weighted by kinds of votes and normalized by post time), we used regression learners, including Linear Regression, Ridge Regression, Passive Aggressive Regression, AdaBoost, Random Forest, etc. In terms of features, we used both text features (bag of words) and metadata of reviews and their users. In addition, the text features are normalized by overall frequency and their dimension are reduced using PCA technique.</p>
 
 <p><strong>Measurement.</strong> The dataset we used are the json files achieved from <a href="https://www.yelp.com/dataset_challenge">Yelp's official website</a>. We first preprocessed them to be standardized csv files. Then trained and tested them with scikit-learn library. To measure the success, we used the Dummy Regressor learner as the baseline. It is similar to the ZeroR classifier in Weka which simply predicts the result by assigning a simple value (i.e. mean, median, constant quality). We compared the performances of different kinds of regression learners with the baseline learner.</p>
 
@@ -99,8 +87,8 @@
 </tr>
 <tr>
 <td>Random Forest</td>
-<td>running</td>
-<td>running</td>
+<td>1.39</td>
+<td>-0.27</td>
 </tr>
 </tbody>
 </table>
@@ -148,18 +136,44 @@
 </tr>
 </tbody>
 </table>
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Yelp Reviews Recommendation maintained by <a href="https://github.com/lyudison">lyudison</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+<p><strong>Features: Classifications Results (Original Features + Bag of Words</strong>)</p>
+
+<table>
+<thead>
+<tr>
+<th>Models</th>
+<th>Accuracy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dummy Classification</td>
+<td>0.168815447007</td>
+</tr>
+<tr>
+<td>DecisionTreeClassifier</td>
+<td>0.383738877792</td>
+</tr>
+<tr>
+<td>KNeighborsClassifier</td>
+<td>0.456782277102</td>
+</tr>
+<tr>
+<td>GaussianNB():</td>
+<td>0.5037074027</td>
+</tr>
+</tbody>
+</table>
+
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/lyudison/yelp-reviews-recommendation">Yelp Reviews Recommendation</a> is maintained by <a href="https://github.com/lyudison">lyudison</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-    
+    </section>
 
+  
   </body>
 </html>
